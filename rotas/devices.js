@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const Device = require('../model/Devices')
 
 router.get('/', (req, res) => {
     const devices = [{
@@ -25,8 +26,26 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res)=>{
-    res.json(req.body)
-    console.log(req.body)
+    const novoDevice = new Device({
+        nome: req.body.nome,
+        kwh: req.body.kwh,
+        corrente: req.body.corrente,
+        voltagem: req.body.voltagem,
+        fp: req.body.fp
+    })
+    novoDevice.save()
+        .then((dados)=>{
+            res.json({
+                success:true,
+                message: dados
+            })
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                message: err
+            })
+        })
 })
 
 module.exports = router
