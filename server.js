@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const api = require('./rotas/')
+app.use('/api', api)
 const PORT = 3080
 
 app.get('/', (req, res) => {
@@ -10,20 +12,5 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/devices', (req, res) => {
-    const devices = [{
-        id: 123,
-        nome: "Geledeira",
-        hwh: 23,
-        corrente: 2.1,
-        voltagem: 127,
-        fp: 1
-    }]
-    res.json({
-        success: true,
-        deveces: devices
-    })
-
-})
 
 app.listen(PORT)
