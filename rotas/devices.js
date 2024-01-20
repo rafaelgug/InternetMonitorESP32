@@ -1,31 +1,24 @@
 const router = require('express').Router()
 const Device = require('../model/Devices')
 
-router.get('/', (req, res) => {
-    const devices = [{
-        id: 123,
-        nome: "Geledeira",
-        hwh: 23,
-        corrente: 2.1,
-        voltagem: 127,
-        fp: 1
-    },
-    {
-        id: 1234,
-        nome: "Máquina de lavar",
-        hwh: 32,
-        corrente: 3.2,
-        voltagem: 127,
-        fp: 1 
-    }]
-    res.json({
-        success: true,
-        deveces: devices
-    })
+router.get('/', async (req, res) => {
+    try {
+        const listaDevices = await Device.find()
+        res.json({
+            success: true, 
+            message: listaDevices
+        })
+    } catch {
+        res.json({
+            success: false, 
+            message: "Não foi possível listar os devices"
+        })
+    }
+
 
 })
 
-router.post('/', (req, res)=>{
+router.post('/', async (req, res)=>{
     const novoDevice = new Device({
         nome: req.body.nome,
         kwh: req.body.kwh,
@@ -33,19 +26,21 @@ router.post('/', (req, res)=>{
         voltagem: req.body.voltagem,
         fp: req.body.fp
     })
-    novoDevice.save()
-        .then((dados)=>{
-            res.json({
-                success:true,
-                message: dados
-            })
+    try {
+        const saveNovoDevice = await novoDevice.save()
+        res.json({
+            success: true, 
+            message: saveNovoDevice
         })
-        .catch((err)=>{
-            res.json({
-                success: false,
-                message: err
-            })
+    }
+    catch {
+        res.json({
+            success: false,
+            message: "Não foi possível cadastrar novo device"
         })
+
+    }
+
 })
 
 module.exports = router
