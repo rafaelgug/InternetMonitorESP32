@@ -43,4 +43,27 @@ router.post('/', async (req, res)=>{
 
 })
 
+router.put('/:id', async (req, res)=>{
+    try{
+        const updateDevideId = await Device.updateOne(
+            {_id: req.params.id},
+            {kwh: req.body.kwh,
+                corrente: req.body.corrente,
+                voltagem: req.body.voltagem,
+                fp: req.body.fp}
+
+        )
+        res.json({
+            success: true, 
+            updated: updateDevideId.nModified
+        })
+    }
+    catch(err) {
+        res.json({
+            success: false,
+            message: "Não foi possível atualizar novo device"
+        })
+    }
+})
+
 module.exports = router
