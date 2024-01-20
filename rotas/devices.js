@@ -66,4 +66,22 @@ router.put('/:id', async (req, res)=>{
     }
 })
 
+router.delete('/:id', async (req, res)=>{
+    try{
+        const deleteDevideId = await Device.deleteOne({
+            _id: req.params.id
+        })
+        res.json({
+            success: true, 
+            data: deleteDevideId
+        })
+    }
+    catch(err) {
+        res.json({
+            success: false,
+            message: "Não foi possível deletar device"
+        })
+    }
+})
+
 module.exports = router
